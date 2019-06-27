@@ -1,0 +1,50 @@
+                         Setup Kubernetes (K8s) Cluster on AWS
+
+step1 : Create Ubuntu EC2 instance
+
+step2 : sudo apt install awscli
+
+step3 :  curl https://s3.amazonaws.com/aws-cli/awscli-bundle.zip -o awscli-bundle.zip
+         apt install unzip python
+         unzip awscli-bundle.zip
+         ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
+
+step4: Install kubectl
+
+       curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://    storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+ 
+ chmod +x ./kubectl
+
+ sudo mv ./kubectl /usr/local/bin/kubectl
+
+step5: Create an IAM user/role with Route53, EC2, IAM and S3 full access
+
+step6: Attach IAM role to ubuntu server
+
+step7 :   aws configure
+
+step8: Install kops on ubuntu instance:
+
+       curl -LO https://github.com/kubernetes/kops/releases/download/$(curl -s https://api.github.com/repos/kubernetes/kops/releases/latest | grep tag_name | cut -d '"' -f 4)/kops-linux-amd64
+
+ chmod +x kops-linux-amd64
+
+ sudo mv kops-linux-amd64 /usr/local/bin/kops
+
+step9 : Expose environment variable:
+
+         export KOPS_STATE_STORE=s3://kubernetes.problems
+
+step10: Create kubernetes cluster definitions on S3 bucket
+
+          kops create cluster --cloud=aws --dns-zone=yuvaraj.analyzedevops.com --  name=yuvaraj.analyzedevops.com --master-size=t2.medium --node-size=t2.micro --state=s3://objectchatapp1.k8s.santsarad.analyzedevops.com --zones=ap-south-1a --node-count=2
+
+step11 : Validate your cluster
+
+           kops validate cluster
+
+step12 : To delete cluster
+
+         kops delete cluster yuvaraj.analyzedevops.com --yes
+
+
